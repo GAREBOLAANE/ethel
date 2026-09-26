@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Ethel ❤️</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: Georgia, 'Times New Roman', serif;
+        background: linear-gradient(135deg, #16000a, #4b0018, #170009);
+        color: white;
+        min-height: 100vh;
+        overflow-x: hidden;
+    }
+
+    .page {
+        min-height: 100vh;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 25px;
+        position: relative;
+    }
+
+    .page.active {
+        display: flex;
+    }
+
+    .card {
+        width: min(700px, 95%);
+        background: rgba(255,255,255,0.09);
+        border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 25px;
+        padding: 40px 30px;
+        text-align: center;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        position: relative;
+        z-index: 5;
+    }
+
+    h1 {
+        font-size: clamp(2rem, 6vw, 4rem);
+        margin-bottom: 15px;
+    }
+
+    h2 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+
+    p {
+        font-size: 1.15rem;
+        line-height: 1.8;
+        margin: 15px 0;
+        color: #ffeef3;
+    }
+
+    .small {
+        font-size: 0.95rem;
+        opacity: 0.8;
+    }
+
+    .name {
+        color: #ffb6c9;
+        font-weight: bold;
+    }
+
+    .heart {
+        color: #ff4f7b;
+        font-size: 2rem;
+    }
+
+    button {
+        border: none;
+        border-radius: 50px;
+        padding: 15px 28px;
+        margin: 10px;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        transform: scale(1.08);
+    }
+
+    .yes {
+        background: #ff3f70;
+        color: white;
+        box-shadow: 0 8px 25px rgba(255,63,112,0.4);
+    }
+
+    .no {
+        background: white;
+        color: #8b1538;
+    }
+
+    .next {
+        background: #ff8fab;
+        color: white;
+        margin-top: 25px;
+    }
+
+    .compliments {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        margin-top: 25px;
+    }
+
+    .compliment {
+        background: rgba(255,255,255,0.08);
+        padding: 18px;
+        border-radius: 18px;
+        border: 1px solid rgba(255,255,255,0.12);
+        font-size: 1rem;
+    }
+
+    /* Roses */
+    .rose {
+        position: fixed;
+        top: -60px;
+        font-size: 35px;
+        animation: fall linear forwards;
+        z-index: 10;
+        pointer-events: none;
+    }
+
+    @keyframes fall {
+        0% {
+            transform: translateY(-50px) rotate(0deg);
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateY(110vh) rotate(360deg);
+            opacity: 0;
+        }
+    }
+
+    /* Gifts */
+    .gifts {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
+        margin-top: 25px;
+    }
+
+    .gift {
+        background: linear-gradient(145deg, #ff477e, #a50038);
+        border-radius: 20px;
+        padding: 25px 15px;
+        cursor: pointer;
+        transition: 0.3s;
+        min-height: 150px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+
+    .gift:hover {
+        transform: translateY(-8px) scale(1.03);
+    }
+
+    .gift-icon {
+        font-size: 3rem;
+        margin-bottom: 10px;
+    }
+
+    .gift h3 {
+        margin-bottom: 5px;
+    }
+
+    .gift-message {
+        display: none;
+        margin-top: 12px;
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    .gift.open .gift-message {
+        display: block;
+    }
+
+    .gift.open {
+        background: linear-gradient(145deg, #7c002c, #ff477e);
+    }
+
+    .final-message {
+        margin-top: 30px;
+        padding: 25px;
+        background: rgba(255,255,255,0.08);
+        border-radius: 20px;
+        display: none;
+    }
+
+    .final-message.show {
+        display: block;
+        animation: fadeIn 1s ease;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .signature {
+        margin-top: 25px;
+        font-size: 1.4rem;
+        color: #ffb6c9;
+    }
+
+    .progress {
+        position: fixed;
+        top: 15px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 20;
+        font-size: 0.85rem;
+        color: #ffc5d4;
+        display: none;
+    }
+
+    @media (max-width: 600px) {
+        .card {
+            padding: 30px 20px;
+        }
+
+        .compliments,
+        .gifts {
+            grid-template-columns: 1fr;
+        }
+
+        p {
+            font-size: 1rem;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="progress" id="progress">Chapter 1 of 5</div>
+
+
+<!-- CHAPTER 1 -->
+<section class="page active" id="page1">
+
+    <div class="card">
+
+        <div class="heart">❤️</div>
+
+        <h1>For <span class="name">Ethel</span></h1>
+
+        <p class="small">
+            Before I ask you anything, I think you deserve to know
+            what I noticed about you.
+        </p>
+
+        <div class="compliments">
+
+            <div class="compliment">
+                🌹 You carry yourself with maturity.
+            </div>
+
+            <div class="compliment">
+                ✨ You have a beautiful way of handling yourself.
+            </div>
+
+            <div class="compliment">
+                💕 You seem like someone who knows her worth.
+            </div>
+
+            <div class="compliment">
+                🌸 There's something naturally special about you.
+            </div>
+
+            <div class="compliment">
+                🫶 You have a calmness that is genuinely attractive.
+            </div>
+
+            <div class="compliment">
+                ❤️ And honestly... your presence is hard to ignore.
+            </div>
+
+        </div>
+
+        <p>
+            So after observing all this very serious evidence...
+            I have one important question.
+        </p>
+
+        <button class="next" onclick="goToPage(2)">
+            Continue ❤️
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- CHAPTER 2 -->
+<section class="page" id="page2">
+
+    <div class="card">
+
+        <div class="heart">🌹</div>
+
+        <h2>The Question</h2>
+
+        <p>
+            Ethel...
+        </p>
+
+        <p>
+            I've enjoyed getting to know you, and I think you're
+            someone I'd genuinely love to have in my life.
+        </p>
+
+        <p>
+            So, I have to ask...
+        </p>
+
+        <h2>
+            Would you be interested in being my girlfriend? ❤️
+        </h2>
+
+        <button class="yes" onclick="sayYes()">
+            YES ❤️
+        </button>
+
+        <button class="no" onclick="sayNo()">
+            NO 😭
+        </button>
+
+        <p id="noMessage" class="small"></p>
+
+    </div>
+
+</section>
+
+
+<!-- CHAPTER 3 -->
+<section class="page" id="page3">
+
+    <div class="card">
+
+        <div class="heart">🌹🌹🌹</div>
+
+        <h2>Okay... Now About Me ❤️</h2>
+
+        <p>
+            Since I just asked you a pretty serious question,
+            I think you deserve to know what kind of person is
+            standing on the other side of this screen.
+        </p>
+
+        <div class="compliments">
+
+            <div class="compliment">
+                🏋️ <strong>Fitness Lover</strong><br>
+                I enjoy fitness and working on myself.
+            </div>
+
+            <div class="compliment">
+                ❤️ <strong>Loverboy</strong><br>
+                Yes... I admit it. I'm a loverboy.
+            </div>
+
+            <div class="compliment">
+                🫶 <strong>I Care A Lot</strong><br>
+                When someone matters to me, I genuinely care.
+            </div>
+
+            <div class="compliment">
+                🔐 <strong>Loyal</strong><br>
+                I value honesty, trust and loyalty.
+            </div>
+
+            <div class="compliment">
+                🌹 <strong>Romantic</strong><br>
+                I like making someone feel appreciated.
+            </div>
+
+            <div class="compliment">
+                🤝 <strong>Intentional</strong><br>
+                I don't want something meaningless.
+            </div>
+
+        </div>
+
+        <p>
+            Basically...
+            I'm just a fitness-loving loverboy
+            with a big heart. 😂❤️
+        </p>
+
+        <button class="next" onclick="goToPage(4)">
+            I Have Gifts For You 🎁
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- CHAPTER 4 -->
+<section class="page" id="page4">
+
+    <div class="card">
+
+        <div class="heart">🎁</div>
+
+        <h2>A Few Gifts For You</h2>
+
+        <p>
+            I couldn't physically put these gifts in your hands...
+            so I put them here instead.
+        </p>
+
+        <p class="small">
+            Click every gift. You never know what's inside. 👀
+        </p>
+
+        <div class="gifts">
+
+            <div class="gift" onclick="openGift(this)">
+                <div class="gift-icon">🎁</div>
+                <h3>Gift #1</h3>
+                <div class="gift-message">
+                    ❤️ My heart.<br><br>
+                    Not because it's perfect,
+                    but because it's genuine.
+                    And I'd rather give you something real
+                    than something temporary.
+                </div>
+            </div>
+
+
+            <div class="gift" onclick="openGift(this)">
+                <div class="gift-icon">🌹</div>
+                <h3>Gift #2</h3>
+                <div class="gift-message">
+                    🌹 A rose for you.<br><br>
+                    A reminder that beautiful things deserve
+                    to be appreciated.
+                </div>
+            </div>
+
+
+            <div class="gift" onclick="openGift(this)">
+                <div class="gift-icon">💌</div>
+                <h3>Gift #3</h3>
+                <div class="gift-message">
+                    💌 A little promise.<br><br>
+                    I will always try to communicate,
+                    listen, respect you and make you feel valued.
+                </div>
+            </div>
+
+
+            <div class="gift" onclick="openGift(this)">
+                <div class="gift-icon">✨</div>
+                <h3>Gift #4</h3>
+                <div class="gift-message">
+                    ✨ A future full of possibilities.<br><br>
+                    Maybe the best memories haven't even
+                    happened yet.
+                </div>
+            </div>
+
+        </div>
+
+        <button class="next" onclick="goToPage(5)">
+            One Last Thing ❤️
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- CHAPTER 5 -->
+<section class="page" id="page5">
+
+    <div class="card">
+
+        <div class="heart">❤️🌹❤️</div>
+
+        <h1>Ethel...</h1>
+
+        <p>
+            Maybe this website is a little crazy.
+        </p>
+
+        <p>
+            Maybe I spent way too much time making it.
+        </p>
+
+        <p>
+            But honestly...
+            I wanted to do something different.
+        </p>
+
+        <div class="final-message show">
+
+            <h2>
+                I like you. ❤️
+            </h2>
+
+            <p>
+                And I would genuinely love the opportunity
+                to get closer to you, care for you, make you laugh,
+                support you and create beautiful memories together.
+            </p>
+
+            <p>
+                No pressure. No pretending.
+                Just me being honest about how I feel.
+            </p>
+
+            <p>
+                So, Ethel...
+            </p>
+
+            <h2>
+                ❤️ Will you give us a chance? ❤️
+            </h2>
+
+            <div class="signature">
+                — From your loverboy 🌹
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<script>
+
+let currentPage = 1;
+
+function goToPage(pageNumber) {
+
+    document.querySelectorAll(".page").forEach(page => {
+        page.classList.remove("active");
+    });
+
+    document.getElementById("page" + pageNumber).classList.add("active");
+
+    currentPage = pageNumber;
+
+    document.getElementById("progress").textContent =
+        "Chapter " + pageNumber + " of 5";
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+/* YES BUTTON */
+
+function sayYes() {
+
+    createRoses();
+
+    setTimeout(() => {
+        goToPage(3);
+    }, 1800);
+}
+
+
+/* NO BUTTON */
+
+function sayNo() {
+
+    const message = document.getElementById("noMessage");
+
+    message.innerHTML =
+        "😭 Wait... are you sure? Think about that answer again.";
+
+    const button = document.querySelector(".no");
+
+    button.style.transform =
+        "translate(" + (Math.random() * 120 - 60) +
+        "px," + (Math.random() * 80 - 40) + "px)";
+
+    setTimeout(() => {
+
+        button.style.transform = "translate(0,0)";
+
+    }, 800);
+}
+
+
+/* ROSES */
+
+function createRoses() {
+
+    const roseEmojis = ["🌹", "🌹", "🌹", "❤️", "🌹"];
+
+    for (let i = 0; i < 40; i++) {
+
+        const rose = document.createElement("div");
+
+        rose.className = "rose";
+
+        rose.innerHTML =
+            roseEmojis[Math.floor(Math.random() * roseEmojis.length)];
+
+        rose.style.left =
+            Math.random() * 100 + "vw";
+
+        rose.style.animationDuration =
+            (3 + Math.random() * 4) + "s";
+
+        rose.style.animationDelay =
+            Math.random() * 2 + "s";
+
+        rose.style.fontSize =
+            (20 + Math.random() * 30) + "px";
+
+        document.body.appendChild(rose);
+
+        setTimeout(() => {
+            rose.remove();
+        }, 8000);
+    }
+}
+
+
+/* GIFTS */
+
+function openGift(gift) {
+
+    gift.classList.toggle("open");
+
+    const icon = gift.querySelector(".gift-icon");
+
+    if (gift.classList.contains("open")) {
+
+        icon.textContent = "💖";
+
+    } else {
+
+        icon.textContent = "🎁";
+
+    }
+}
+
+
+/* SHOW PROGRESS AFTER FIRST PAGE */
+
+document.getElementById("progress").style.display = "block";
+
+</script>
+
+</body>
+</html>
